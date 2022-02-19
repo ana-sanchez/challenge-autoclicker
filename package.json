@@ -1,0 +1,78 @@
+{
+  "name": "challenge-autoclicker",
+  "description": "Webcomponent challenge-autoclicker following open-wc recommendations",
+  "license": "MIT",
+  "author": "challenge-autoclicker",
+  "version": "0.0.0",
+  "scripts": {
+    "lint": "eslint --ext .js,.html . --ignore-path .gitignore && prettier \"**/*.js\" --check --ignore-path .gitignore",
+    "format": "eslint --ext .js,.html . --fix --ignore-path .gitignore && prettier \"**/*.js\" --write --ignore-path .gitignore",
+    "test": "web-test-runner --coverage",
+    "test:watch": "web-test-runner --watch",
+    "build": "rimraf dist && rollup -c rollup.config.js",
+    "start:build": "web-dev-server --root-dir dist --app-index index.html --open",
+    "start": "web-dev-server",
+    "copy": "copyfiles -u 1 src/manifest.json src/favicon.ico src/assets/* src/assets/**/* src/assets/**/*/* src/workbox-s* dist",
+    "production": "cross-env ROLLUP_WATCH=true npm run build && npm run replace",
+    "preprod": "cross-env ROLLUP_WATCH= npm run build && npm run replace",
+    "dev": "cross-env ROLLUP_WATCH=true npm run build && npm run replace-dev",
+    "replace": "node replace",
+    "replace-dev": "node replace-dev",
+    "replace-preprod": "node replace-preprod",
+    "firebase-deploy": "firebase deploy --only hosting:challenge-autoclicker --project challenge-autoclicker",
+    "deploy-dev": "npm run dev && firebase deploy --only hosting:challenge-autoclicker --project challenge-autoclicker",
+    "dist": "npm run dev && es-dev-server -r ./dist -o / -a dist/index.html -p 8080 -w -n --debug",
+    "make-symlink": "cd src && ln -nsf ../node_modules node_modules",
+    "make-symlink-win": "mklink /J src\\node_modules node_modules"
+  },
+  "dependencies": {
+    "@vaadin/router": "^1.7.4",
+    "firebase": "^9.6.7",
+    "lit": "^2.0.0-rc.2"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.15.0",
+    "@open-wc/building-rollup": "^1.10.0",
+    "@open-wc/eslint-config": "^4.3.0",
+    "@open-wc/testing": "next",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-node-resolve": "^13.0.4",
+    "@web/dev-server": "^0.1.21",
+    "@web/rollup-plugin-html": "^1.9.1",
+    "@web/rollup-plugin-import-meta-assets": "^1.0.7",
+    "@web/test-runner": "^0.13.16",
+    "babel-plugin-template-html-minifier": "^4.1.0",
+    "deepmerge": "^4.2.2",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "husky": "^4.3.8",
+    "lint-staged": "^10.5.4",
+    "prettier": "^2.3.2",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.56.2",
+    "rollup-plugin-copy": "^3.4.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-workbox": "^6.2.0"
+  },
+  "eslintConfig": {
+    "extends": [
+      "@open-wc",
+      "prettier"
+    ]
+  },
+  "prettier": {
+    "singleQuote": true,
+    "arrowParens": "avoid"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  }
+}
