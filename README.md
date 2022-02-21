@@ -1,6 +1,3 @@
-<p align="center">
-  <img width="200" src="https://open-wc.org/hero.png"></img>
-</p>
 
 ## Challenge autoclicker
 
@@ -9,6 +6,12 @@
 ## Quickstart
 
 To get started:
+
+For start coding in the local dev environment, there are some dependencies to install before:
+
+- NodeJs
+- Firebase CLI
+- Visual Studio Code
 
 ```bash
 npm install
