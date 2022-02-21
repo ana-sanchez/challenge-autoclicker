@@ -4,19 +4,53 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="Description" content="Put your description here.">
-  <base href="/">
+  <meta name="Description" content="PWA cookie clicker">
+  <link rel="icon" href="/src/assets/images/favicon.png">
+  <link rel="manifest" href="/src/manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="PWA cookie clicker">
+
+
 
   <style>
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: sans-serif;
-      background-color: #ededed;
-    }
+        @font-face {
+        font-family: 'Chakra';
+        src: local('Chakra'), url('/src/assets/fonts/ChakraPetch-Regular.ttf');
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'Chakra Bold';
+        src: local('Chakra Bold'), url('/src/assets/fonts/ChakraPetch-Bold.ttf');
+        font-weight: bold;
+        font-display: swap;
+      }
+
+      :root {
+        --bg_color: #eeeadd;
+        --yellow: #fee5a0 ;
+        --brown: #724b32;
+        --black: #000;
+        --white: #fff;
+        --danger: #e50101;
+        --font: "Chakra", sans-serif;
+        --font_bold: "Chakra Bold", sans-serif;
+      }
+      *{
+          font-family: 'Chakra', sans-serif;
+          color: var(--brown);
+          font-size: 1rem;
+          margin: 0;
+          padding: 0;
+          -webkit-tap-highlight-color: rgba(0,0,0,0);
+          overflow:hidden;
+      }
+      body{
+        overscroll-behavior: auto;
+      }
+
   </style>
-  <title>challenge-autoclicker</title>
+  <title>Cookie clicker</title>
 </head>
 
 <body>

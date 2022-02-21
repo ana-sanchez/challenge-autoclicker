@@ -24,7 +24,7 @@ fs.readFile(fileToReplace, 'utf8', (err,data) => {
   }
 
   let result = data.replace('environment: "local"', 'environment: "dev"');
-  result = result.replace('/firebase-messaging-sw.js', '/service-worker.js');
+  result = result.replace('/firebase-messaging-sw.js', '/src/service-worker.js');
   result = result.replace('/firebase-cloud-messaging-push-scope', '/');
 
   fs.writeFile(fileToReplace, result, 'utf8', (error) => {

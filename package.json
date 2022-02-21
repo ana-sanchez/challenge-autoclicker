@@ -7,28 +7,25 @@
   "scripts": {
     "lint": "eslint --ext .js,.html . --ignore-path .gitignore && prettier \"**/*.js\" --check --ignore-path .gitignore",
     "format": "eslint --ext .js,.html . --fix --ignore-path .gitignore && prettier \"**/*.js\" --write --ignore-path .gitignore",
-    "test": "web-test-runner --coverage",
+    "test": "web-test-runner \"test/**/*.test.js\" --node-resolve",
     "test:watch": "web-test-runner --watch",
     "build": "rimraf dist && rollup -c rollup.config.js",
     "start:build": "web-dev-server --root-dir dist --app-index index.html --open",
-    "start": "web-dev-server",
-    "copy": "copyfiles -u 1 src/manifest.json src/favicon.ico src/assets/* src/assets/**/* src/assets/**/*/* src/workbox-s* dist",
-    "production": "cross-env ROLLUP_WATCH=true npm run build && npm run replace",
-    "preprod": "cross-env ROLLUP_WATCH= npm run build && npm run replace",
+    "start": "web-dev-server --node-resolve --watch --app-index index.html  -o / -p 8000",
     "dev": "cross-env ROLLUP_WATCH=true npm run build && npm run replace-dev",
     "replace": "node replace",
     "replace-dev": "node replace-dev",
-    "replace-preprod": "node replace-preprod",
     "firebase-deploy": "firebase deploy --only hosting:challenge-autoclicker --project challenge-autoclicker",
     "deploy-dev": "npm run dev && firebase deploy --only hosting:challenge-autoclicker --project challenge-autoclicker",
-    "dist": "npm run dev && es-dev-server -r ./dist -o / -a dist/index.html -p 8080 -w -n --debug",
-    "make-symlink": "cd src && ln -nsf ../node_modules node_modules",
-    "make-symlink-win": "mklink /J src\\node_modules node_modules"
+    "dist": "npm run dev && es-dev-server -r ./dist -o / -a dist/index.html -p 8080 -w -n --debug"
   },
   "dependencies": {
     "@vaadin/router": "^1.7.4",
     "firebase": "^9.6.7",
-    "lit": "^2.0.0-rc.2"
+    "i": "^0.3.7",
+    "idb": "^7.0.0",
+    "lit": "^2.0.0-rc.2",
+    "lit-element": "^3.2.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.15.0",
@@ -56,18 +53,13 @@
   },
   "eslintConfig": {
     "extends": [
-      "@open-wc",
-      "prettier"
+      "@open-wc/eslint-config",
+      "eslint-config-prettier"
     ]
   },
   "prettier": {
     "singleQuote": true,
     "arrowParens": "avoid"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "lint-staged": {
     "*.js": [
@@ -75,4 +67,5 @@
       "prettier --write"
     ]
   }
+
 }
