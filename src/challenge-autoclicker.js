@@ -17,6 +17,7 @@ export class ChallengeAutoclicker extends LitElement {
       :host {
         display:block;
         overflow: hidden;
+        width:100%;
       }
 
       :root {
@@ -53,13 +54,10 @@ export class ChallengeAutoclicker extends LitElement {
     appHeight();
 
     const app = initializeApp(c.firebaseConfig);
-    console.log(app);
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/src/service-worker.js').then( (reg) => {
+      navigator.serviceWorker.register('/service-worker.js').then( (reg) => {
         // Registration was successful
-        this.registration = reg;
-        // if (app.messaging.isSupported()) app.useServiceWorker(reg);
-        console.log('ServiceWorker registration successful with scope: ', reg.scope);
+       console.log('ServiceWorker registration successful with scope: ', reg.scope);
       }, (err) => {
         // registration failed :(
         console.log('ServiceWorker registration failed: ', err);

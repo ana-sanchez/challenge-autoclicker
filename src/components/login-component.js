@@ -27,6 +27,7 @@ export class LoginComponent extends LitElement {
         padding: 100px 50px;
         place-content: center;
         max-width: 360px;
+        width:100%;
         margin: auto;
         box-sizing:border-box;
         font-family: "Chakra Bold", sans-serif;

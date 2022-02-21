@@ -19,7 +19,7 @@ export class GameComponent extends LitElement {
       NormalizeCss,
       css`
       :host {
-        max-width: 400px;
+        max-width: 360px;
         width:100%;
         margin: 0 auto;
       }
@@ -27,7 +27,7 @@ export class GameComponent extends LitElement {
         height: var(--app-height);
       }
       .main {
-        max-width: 400px;
+        max-width: 360px;
         width:100%;
         margin: 0 auto;
         display:flex;
@@ -131,13 +131,10 @@ export class GameComponent extends LitElement {
   }
 
   saveUserProgress() {
-    console.log(this.user)
     getDataByName(`${this.user}`, 'user-db','user' )
     .then(res => {
       if(res.user === this.user) {
-        console.log(res, this.user)
         res.count = this.count;
-        // console.log(user_update)
         setData(res, 'user-db', 'user', )
       }
     })
