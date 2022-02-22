@@ -5,7 +5,8 @@ import { initializeApp } from 'firebase/app';
 import  { config } from './data/config.js';
 
 import './components/login-component.js';
-import './components/game-component.js'
+import './components/game-component.js';
+import './components/ranking-component.js';
 
 export class ChallengeAutoclicker extends LitElement {
 
@@ -45,20 +46,12 @@ export class ChallengeAutoclicker extends LitElement {
     appHeight();
 
     initializeApp(config.firebaseConfig);
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/service-worker.js').then( (reg) => {
-        // Registration was successful
-        console.log('ServiceWorker registration successful with scope: ', reg.scope);
-      }, (err) => {
-        // registration failed :(
-        console.log('ServiceWorker registration failed: ', err);
-      });
-    }
 
     const router = new Router(this.shadowRoot.getElementById('outlet'));
     router.setRoutes([
       { path: '/', component: 'login-component' },
       { path: '/game', component: 'game-component' },
+      { path: '/ranking', component: 'ranking-component' },
       {
         path: '(.*)',
         redirect: '/',

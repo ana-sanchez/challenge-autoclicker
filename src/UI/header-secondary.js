@@ -2,7 +2,7 @@ import { LitElement, html, css } from 'lit-element';
 
 import { NormalizeCss } from '../styles/normalize.js';
 
-export class HeaderPrimary extends LitElement{
+export class HeaderSecondary extends LitElement{
 
   static get styles() {
     return [
@@ -33,7 +33,7 @@ export class HeaderPrimary extends LitElement{
       .header_nav--link {
         border: 1px solid var(--brown);
         border-radius: 3px;
-        padding: 2px;
+        padding: 5px;
         font-size: .875rem;
         cursor:pointer;
       }
@@ -46,17 +46,11 @@ export class HeaderPrimary extends LitElement{
     return html`
       <header class="header">
         <h2 class="header_title">Cookie clicker</h2>
-        <nav class="header_nav">
-          <ul>
-            <li class="header_nav--link"><a aria-label="Go to login" aria-labelledby="Go to login" href="/">Exit</a></li>
-            <li class="header_nav--link"><a aria-label="Go to ranking view" aria-labelledby="Go to login" href="/ranking">Ranking</a></li>
-          </ul>
-        </nav>
-
+        <button type="button" aria-label="Go back"  aria-labelledby="Go back" @click="${() => window.history.back()}">Back</button>
       </header>
     `;
   }
 
 }
 
-customElements.define('header-primary', HeaderPrimary);
+customElements.define('header-secondary', HeaderSecondary);

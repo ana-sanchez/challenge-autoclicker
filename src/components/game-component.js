@@ -1,14 +1,15 @@
 /* eslint-disable class-methods-use-this */
 import { LitElement, html, css } from 'lit-element';
+import { Router } from '@vaadin/router';
 
 import { NormalizeCss } from '../styles/normalize.js';
 import { cookie } from '../styles/my-icons.js';
 
+import { checkCookies } from '../service/helpers.js';
 import { getCurrentUser } from '../data/constants.js';
 import { getDataByName, setData } from '../service/app-service.js';
 
 import '../UI/header-primary.js';
-import { checkCookies } from '../service/helpers.js';
 
 export class GameComponent extends LitElement {
   static get properties() {
@@ -112,7 +113,7 @@ export class GameComponent extends LitElement {
         <section class="main_autoclikers">
           <button-default
             size="small"
-            label="Buy autoclickers"
+            label="Buy autoClickers"
             ?disabled="${!checkCookies(this.cookies, 100)}"
             @click="${() => this.buyCookies(0)}"
             @touchstart="${() => this.buyCookies(0)}"></button-default>
@@ -141,6 +142,8 @@ export class GameComponent extends LitElement {
           this.cookies = res.cookies;
           this.progress = res.progress;
           if(this.progress[0] >= 1) setInterval(() => { this.handleAutoclickers() }, 100)
+        } else {
+          Router.go('/')
         }
       })
     }
@@ -182,7 +185,7 @@ export class GameComponent extends LitElement {
   saveUserProgress() {
     getDataByName(`${this.user}`, 'user-db','user')
     .then(res => {
-      if(res?.user === this.user) {
+      if(res.user === this.user) {
         res.cookies = this.cookies;
         res.progress = this.progress;
         setData(res, 'user-db', 'user');

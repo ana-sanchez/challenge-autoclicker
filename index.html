@@ -9,23 +9,14 @@
 
   <link rel="icon" href="./src/assets/images/favicon.png">
   <link rel="manifest" href="./src/manifest.json">
-  <link rel="apple-touch-icon" href="./src/assets/images/icon192.png">
-
+  <link rel="apple-touch-icon" type="image/png"  href="./src/assets/images/icon192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;700&display=swap" rel="stylesheet">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="PWA cookie clicker">
   <style>
-        @font-face {
-        font-family: 'Chakra';
-        src: local('Chakra'), url('./src/assets/fonts/ChakraPetch-Regular.ttf');
-        font-display: swap;
-      }
-      @font-face {
-        font-family: 'Chakra Bold';
-        src: local('Chakra Bold'), url('./src/assets/fonts/ChakraPetch-Bold.ttf');
-        font-weight: bold;
-        font-display: swap;
-      }
 
       :root {
         --bg_color: #eeeadd;
@@ -34,11 +25,10 @@
         --black: #000;
         --white: #fff;
         --danger: #e50101;
-        --font: "Chakra", sans-serif;
-        --font_bold: "Chakra Bold", sans-serif;
+        --font: "Chakra Petch", sans-serif;
       }
       *{
-          font-family: 'Chakra', sans-serif;
+          font-family: var(--font);
           color: var(--brown);
           font-size: 1rem;
           margin: 0;

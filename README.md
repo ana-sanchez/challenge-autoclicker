@@ -1,7 +1,8 @@
 
 ## Challenge autoclicker
 
-[![Built with open-wc recommendations](https://img.shields.io/badge/built%20with-open--wc-blue.svg)](https://github.com/open-wc)
+Progressive Web App created with @open-wc and lit-element.
+You can test it: <https://challenge-autoclicker.web.app/>
 
 ## Quickstart
 
@@ -18,6 +19,10 @@ npm install
 # requires node 10 & npm 6 or higher
 ```
 
+Start a local dev server with:
+
+```npm run start```
+
 ## Scripts
 
 - `start` runs your app for development, reloading on file changes
@@ -27,8 +32,18 @@ npm install
 - `lint` runs the linter for your project
 - `format` fixes linting and formatting errors
 
-## Tooling configs
+**How to deploy**
 
-For most of the tools, the configuration is in the `package.json` to reduce the amount of files in your project.
+- To list all the Firebase projects to which you have access, run:
 
-If you customize the configuration a lot, you can consider moving them to individual files.
+```firebase projects:list```
+
+- Set current firebase project firebase:
+
+```firebase use [proyect]```
+
+- To deploy in dev:
+
+```npm run deploy-dev```
+
+**Happy coding!**

@@ -3,12 +3,12 @@ import { Router } from '@vaadin/router';
 
 import { logo } from '../styles/my-icons.js';
 import { NormalizeCss } from '../styles/normalize.js';
+import { getLogStatus } from '../data/constants.js';
 import { checkInputUsername, inputIsEmpty } from '../service/helpers.js';
 import { isUserSaved, saveCurrentUser, saveNewUser } from '../service/app-service.js';
 
 import '../UI/button-default.js';
 import '../UI/input-default.js';
-import { getLogStatus } from '../data/constants.js';
 
 export class LoginComponent extends LitElement {
   static get properties() {
@@ -27,7 +27,8 @@ export class LoginComponent extends LitElement {
         width: 100%;
         margin: auto;
         height: var(--app-height);
-        font-family: "Chakra Bold", sans-serif;
+        font-family: var(--font);
+        font-weight:700;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
@@ -50,7 +51,7 @@ export class LoginComponent extends LitElement {
         max-width:200px;
       }
       .header_title {
-        font-size:18px;
+        font-size:1.125rem;
       }
       .form {
         display: flex;
@@ -99,9 +100,9 @@ export class LoginComponent extends LitElement {
     if(checkInputUsername(this.user)) {
       this.shadowRoot.querySelector('input-default').setAttribute('isError', true);
       this.shadowRoot.querySelector('input-default').error = inputIsEmpty();
-    } else if(this.isLogged && !this.isUserSaved(this.user)) { // Handle add current user
-      saveCurrentUser(this.user)
-      Router.go('/game')
+    } else if(this.isLogged && !isUserSaved(this.user)) { // Handle add current user
+      saveCurrentUser(this.user);
+      Router.go('/game');
     } else { // Handle new user
       saveNewUser(this.user, 0);
       Router.go('/game');

@@ -47,21 +47,20 @@ export function captureException(){
 }
 
 export function getData(database, storename){
-  return new Promise((res, rej) => {
+  return new Promise(async(res, rej) => {
     checkIDB(database)
     .then(async dbExists => {
       if(dbExists){
         const db = await openDB(database);
         const tx = db.transaction(storename, 'readonly');
         const store = tx.objectStore(storename);
-        await store.getAll().then(request => { res(request) });
+        await store.getAll().then(request => { res(request) })
         await tx.done;
       }else{
-        rej()
         captureException();
       }
     }).catch((err) => {
-      console.log(err);
+      console.log(err)
     });
   });
 }

@@ -2,7 +2,7 @@
 const CACHE_NAME = 'challenge-autoclicker-v1';
 const urlsToCache = [
   '/',
-  '/src'
+  '/game'
 ];
 
 self.addEventListener('install', (event) =>  {
@@ -18,7 +18,6 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
-        // Cache hit - return response
          if(response) {
           return response;
         }

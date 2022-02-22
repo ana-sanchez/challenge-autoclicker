@@ -25,7 +25,7 @@ export class InputDefault extends LitElement{
       }
       .fieldset_label {
         color: rgb(80, 80, 80);
-        font-family: "Chakra", sans-serif;
+        font-family: var(--font);
         font-size: 1rem;
         display: block;
         width: fit-content;
@@ -34,7 +34,8 @@ export class InputDefault extends LitElement{
         transition: all 0.2s ease-in-out;
       }
       .fieldset_label.focus {
-        font-family: "Chakra Bold", sans-serif;
+        font-family: var(--font);
+        font-weight:700;
         transform: translate3d(7px, 12px, 10px);
         background-color: var(--bg_color);
         padding:0 10px;
@@ -57,7 +58,8 @@ export class InputDefault extends LitElement{
         border: 1px solid rgb(223 148 101);
       }
       .fieldset_label.focus {
-        font-family: "Chakra Bold", sans-serif;
+        font-family: var(--font);
+        font-weight: 700;
       }
       .fieldset_input:disabled {
         color: rgba(0, 0, 0, 0.26);
