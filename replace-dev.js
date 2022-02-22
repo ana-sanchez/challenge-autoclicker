@@ -8,10 +8,18 @@ function setCurrentDatetime(){
   let hours = new Date().getHours();
   let minutes = new Date().getMinutes();
 
-  if(day < 10) day = `0${day}`;
-  if(month < 10) month = `0${month}`;
-  if(hours < 10) hours = `0${hours}`;
-  if(minutes < 10) minutes = `0${minutes}`;
+  if(day < 10) {
+    day = `0${day}`;
+  };
+  if(month < 10){
+    month = `0${month}`;
+  };
+  if(hours < 10) {
+    hours = `0${hours}`;
+  };
+  if(minutes < 10) {
+    minutes = `0${minutes}`;
+  };
   return `_${day}/${month}/${year}_${hours}:${minutes}`;
 }
 
@@ -24,18 +32,18 @@ fs.readFile(fileToReplace, 'utf8', (err,data) => {
   }
 
   let result = data.replace('environment: "local"', 'environment: "dev"');
-  result = result.replace('/firebase-messaging-sw.js', '/src/service-worker.js');
+  result = result.replace('/firebase-messaging-sw.js', '/service-worker.js');
   result = result.replace('/firebase-cloud-messaging-push-scope', '/');
 
   fs.writeFile(fileToReplace, result, 'utf8', (error) => {
-    if (err) return console.log(error);
+    if(err) return console.log(error);
   });
 });
 
 const fileIndexToReplace = 'dist/index.html';
 console.log("replacing index.html file!");
 fs.readFile(fileIndexToReplace, 'utf8', (err,data) => {
-  if (err) {
+  if(err) {
     return console.log(err);
   }
 

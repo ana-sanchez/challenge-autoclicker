@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { css } from "lit-element";
+import { css } from 'lit-element';
 
 export const NormalizeCss = css `
 

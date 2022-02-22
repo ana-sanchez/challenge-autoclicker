@@ -1,15 +1,22 @@
+/* eslint-disable class-methods-use-this */
 import { LitElement, html, css } from 'lit-element';
 
-import { getCurrentUser, getDataByName, setData } from '../service/app-service.js';
+import { NormalizeCss } from '../styles/normalize.js';
 import { cookie } from '../styles/my-icons.js';
-import {NormalizeCss} from '../styles/normalize.js';
 
-import '../UI/header-primary.js'
+import { getCurrentUser } from '../data/constants.js';
+import { getDataByName, setData } from '../service/app-service.js';
+
+import '../UI/header-primary.js';
+import { checkCookies } from '../service/helpers.js';
 
 export class GameComponent extends LitElement {
   static get properties() {
     return {
-      count: { type: Number },
+      autoClickerCost: {type: Array},
+      cookies: { type: Number },
+      cookieCost: {type: Array},
+      progress: {type: Array},
       user: {type: String}
     };
   }
@@ -47,12 +54,12 @@ export class GameComponent extends LitElement {
       .scale {
         animation: scale 0.2s ease-in;
       }
-      .footer {
-        position: fixed;
-        bottom: 15px;
-        font-size: .75rem;
-        text-align: center;
-        width: 100%;
+
+
+      .main_autoclikers {
+        margin-top: 50px;
+        display:flex;
+        gap:10px;
       }
 
       @keyframes rotate {
@@ -63,7 +70,6 @@ export class GameComponent extends LitElement {
           transform: rotate(360deg);
         }
       }
-
       @keyframes scale {
         0% {
           transform: scale(0.9);
@@ -75,15 +81,17 @@ export class GameComponent extends LitElement {
           transform: scale(1);
         }
       }
-
-
     `
     ];
   }
 
   constructor() {
     super();
-    this.user = getCurrentUser()
+    this.user = getCurrentUser();
+    this.cookies = 0;
+    this.progress = [0,0,0]
+    this.cookiesCost =[1,2,4]
+    this.autoClickerCost = [100,200,400];
   }
 
   render() {
@@ -91,51 +99,90 @@ export class GameComponent extends LitElement {
     <div class="wrapper">
       <header-primary></header-primary>
       <main class="main">
-        <p class="main_score">${this.setCookies(this.count)}</p>
-        <button type="button" title="Click me" class="main_btn" aria-label="Click me to add a cookie" aria-labelledby="Click me to add a cookie" @click="${() => {this.handleGame()}}">${cookie}</button>
+        <p class="main_score"> Hi ${this.user}! </p>
+        <p class="main_score">${this.setCookies(this.cookies)}</p>
+        <button
+          type="button"
+          title="Click me"
+          class="main_btn"
+          aria-label="Click me to add a cookie"
+          aria-labelledby="Click me to add a cookie"
+          @touchstart="${() => {this.addCookie()}}">${cookie}</button>
+        <section class="main_autoclikers">
+          <button-default
+            size="small"
+            label="Buy autoclickers"
+            ?disabled="${!checkCookies(this.cookies, 100)}"
+            @touchstart="${() => this.buyCookies(0)}"></button-default>
+          <button-default
+            size="small"
+            label="Buy megaClickers"
+            ?disabled="${!checkCookies(this.cookies, 200)}"
+            @touchstart="${() => this.buyCookies(1)}"></button-default>
+        </section>
+        <section class="store">
+          <p>Autoclickers: ${this.progress[0]}</p>
+          <p>MegaClickers: ${this.progress[1]}</p>
+        </section>
       </main>
-      <footer class="footer">Powered by Ana Sánchez</footer>
     </div>
 
     `;
   }
 
   onAfterEnter() {
-    if(this.user)  {
-      getDataByName(`${this.user}`, 'user-db','user' )
+    if(this.user) {
+      getDataByName(`${this.user}`, 'user-db','user')
       .then(res => {
         if(res) {
-          this.count = res.count;
+          this.cookies = res.cookies;
+          this.progress = res.progress;
+          if(this.progress[0] >= 1) setInterval(() => { this.handleAutoclickers() }, 100)
         }
       })
     }
-
   }
 
-  handleGame() {
-    this.count += 1;
-    this.addAnimationBnt()
-    this.saveUserProgress()
-    this.requestUpdate()
+  onBeforeLeave() {
+    this.saveUserProgress();
   }
 
-  addAnimationBnt() {
-    this.shadowRoot.querySelector('.main_btn').classList.add('scale')
+  addCookie() {
+    this.cookies += 1;
+    this.addAnimationButton();
+    this.saveUserProgress();
+  }
+
+  buyCookies(obj) {
+    if(checkCookies(this.cookies, this.autoClickerCost[obj])) {
+      this.progress[obj] += 1;
+      this.cookies -= this.autoClickerCost[obj];
+      setInterval(() => { this.handleAutoclickers() }, 100);
+    }
+  }
+
+  handleAutoclickers() {
+    for(let count = 0; count < this.progress.length; count++) {
+      this.cookies += this.progress[count] * this.cookiesCost[count];
+    }
+  }
+
+  addAnimationButton() {
+    this.shadowRoot.querySelector('.main_btn').classList.add('scale');
     setTimeout(() => { this.shadowRoot.querySelector('.main_btn').classList.remove('scale') }, 100);
   }
 
   setCookies(count) {
-    return html `
-      ${count === 1 ? html `${count} cookie` : html `${count} cookies`}
-    `
+    return html `${count === 1 ? html `${count} cookie` : html `${count} cookies`}`;
   }
 
   saveUserProgress() {
-    getDataByName(`${this.user}`, 'user-db','user' )
+    getDataByName(`${this.user}`, 'user-db','user')
     .then(res => {
       if(res.user === this.user) {
-        res.count = this.count;
-        setData(res, 'user-db', 'user', )
+        res.cookies = this.cookies;
+        res.progress = this.progress;
+        setData(res, 'user-db', 'user');
       }
     })
   }

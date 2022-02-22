@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
-import { NormalizeCss } from "../styles/normalize.js";
+
+import { NormalizeCss } from '../styles/normalize.js';
 
 export class InputDefault extends LitElement{
   static get properties(){
@@ -49,6 +50,9 @@ export class InputDefault extends LitElement{
         color: rgb(55 25 7);
         font-size: .875rem;
       }
+      .fieldset_input.isError {
+        border: 1px solid var(--danger);
+      }
       .fieldset_input:focus {
         border: 1px solid rgb(223 148 101);
       }
@@ -68,17 +72,23 @@ export class InputDefault extends LitElement{
         color: var(--danger);
         font-size:.75rem;
       }
-
     `
     ]
   }
+
+  get inputElement() {
+    if(!this._inputElement) {
+      this._inputElement = this.shadowRoot.querySelector('.fieldset_input');
+    }
+    return this._inputElement;
+}
 
   render() {
     const {label, isError, error} = this
     return html`
     <fieldset class="fieldset">
-      <label for="user" class="fieldset_label" aria-label="${label}" aria-labelledby="${label}">${label}</label>
-      <input type="text" name="user" aria-label="Login" aria-labelledby="Login" maxlength="10" placeholder="User" class="fieldset_input"
+      <label for="input-default" class="fieldset_label" aria-label="${label}" aria-labelledby="${label}">${label}</label>
+      <input type="text" name="input-default" aria-label="Login" aria-labelledby="Login" maxlength="10" placeholder="User" class="fieldset_input ${isError ? 'isError' : ''}"
         @keyup="${() => this.handleKeyUp()}"
         @focus="${() => this.handleFocus()}"
         @focusout="${() => this.handleFocusout()}"
@@ -89,21 +99,23 @@ export class InputDefault extends LitElement{
   }
 
   handleKeyUp() {
-    const { value } = this.shadowRoot.querySelector('.fieldset_input');
+    const { value } = this.inputElement;
     this.dispatchEvent(new CustomEvent('get-value', {composed: true, bubbles: true, detail: { value }}));
   }
 
   handleFocus() {
-    this.shadowRoot.querySelector('.fieldset_label')?.classList.add('focus')
-    if(this.isError) this.isError = false;
+    this.shadowRoot.querySelector('.fieldset_label')?.classList.add('focus');
+    if(this.isError) {
+      this.isError = false;
+    }
   }
 
   handleFocusout() {
-    if(this.shadowRoot.querySelector('.fieldset_label').classList.contains('focus') &&  !this.shadowRoot.querySelector('.fieldset_input').value) this.shadowRoot.querySelector('.fieldset_label').classList.remove('focus')
+    const label = this.shadowRoot.querySelector('.fieldset_label');
+    if(label.classList.contains('focus') && !this.inputElement.value) {
+      label.classList.remove('focus')
+    }
   }
-
-
-
 }
 
 customElements.define('input-default', InputDefault);

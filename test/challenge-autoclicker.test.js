@@ -3,9 +3,10 @@ import { fixture, expect } from '@open-wc/testing';
 
 import '../src/components/login-component.js';
 import '../src/components/game-component.js';
-import '../src/components/UI/input-default.js';
-import '../src/components/UI/button-default.js';
-import '../src/components/UI/header-primary.js';
+import '../src/UI/input-default.js';
+import '../src/UI/button-default.js';
+import '../src/UI/header-primary.js';
+import '../src/service/app-service.js';
 
 
 
@@ -67,6 +68,18 @@ describe('HeaderPrimary', () => {
   beforeEach(async () => {
     element = await fixture(html`<header-primary></header-primary>`);
   });
+
+
+  it('passes the a11y audit', async () => {
+    await expect(element).shadowDom.to.be.accessible();
+  });
+});
+
+describe('AppService', () => {
+  // let element;
+  // beforeEach(async () => {
+  //   element = await fixture(html`<header-primary></header-primary>`);
+  // });
 
 
   it('passes the a11y audit', async () => {

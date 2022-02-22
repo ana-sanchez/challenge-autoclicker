@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
-
 import { Router } from '@vaadin/router';
-import { NormalizeCss } from "../styles/normalize.js";
+
+import { NormalizeCss } from '../styles/normalize.js';
 
 export class HeaderPrimary extends LitElement{
 
@@ -36,23 +36,16 @@ export class HeaderPrimary extends LitElement{
 
   render() {
     return html`
-    <header class="header">
-      <h2 class="header_title">Cookie clicker</h2>
-      <button type="button" aria-label="Go to login" aria-labelledby="Go to login" class="header_btn" @click="${() => this.goToLogin()}">Exit</p>
-    </header>
-
-  `;
+      <header class="header">
+        <h2 class="header_title">Cookie clicker</h2>
+        <button type="button" aria-label="Go to login" aria-labelledby="Go to login" class="header_btn" @click="${() => this.goToLogin()}">Exit</p>
+      </header>
+    `;
   }
 
   goToLogin() {
-    Router.go('/')
+    Router.go('/');
   }
-
-
-
-
-
-
 }
 
 customElements.define('header-primary', HeaderPrimary);

@@ -1,4 +1,4 @@
-export default {
+export const config = {
   firebase_config: {
     apiKey: "AIzaSyA_Uf_q8T0hoi5bPl6qgWR7Mee4UDWTeRY",
     authDomain: "challenge-autoclicker.firebaseapp.com",
