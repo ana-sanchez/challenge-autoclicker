@@ -49,8 +49,10 @@ export class RankingComponent extends LitElement {
         padding: 5px;
         height: calc(var(--app-height) - 97px);
         display: flex;
-        flex-flow: row wrap;
-        place-content: flex-start center;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-content: flex-start;
         padding:5px;
       }
     `
@@ -59,18 +61,17 @@ export class RankingComponent extends LitElement {
 
   constructor() {
     super();
-    this.users = [];
+    this.allUsers = [];
   }
 
   render() {
     return html`
     <div class="wrapper">
-      <header-secondary></header-secondary>
+      <header-secondary page="Ranking"></header-secondary>
       <main class="main">
           ${this.allUsers
             ? html `<ul class="main_list">${this.setMainContent(this.allUsers)}</ul>`
-            : html `<p>No results</p>`
-        }
+            : html `<p>No results</p>`}
       </main>
     </div>
     `;
@@ -81,7 +82,7 @@ export class RankingComponent extends LitElement {
     .then(res => {
       if(res) {
         this.allUsers = res;
-        this.requestUpdate()
+        this.requestUpdate();
       }
     })
   }

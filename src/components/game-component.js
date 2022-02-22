@@ -139,7 +139,6 @@ export class GameComponent extends LitElement {
         </section>
       </main>
     </div>
-
     `;
   }
 
@@ -185,7 +184,7 @@ export class GameComponent extends LitElement {
   addButtonAnimation() {
     this.shadowRoot.querySelector('.main_btn').classList.add('scale');
     setTimeout(() => {
-      this.shadowRoot.querySelector('.main_btn').classList.remove('scale')
+      this.shadowRoot.querySelector('.main_btn').classList.remove('scale');
     }, 100);
   }
 

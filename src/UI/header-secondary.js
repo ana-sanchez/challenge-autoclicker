@@ -3,6 +3,11 @@ import { LitElement, html, css } from 'lit-element';
 import { NormalizeCss } from '../styles/normalize.js';
 
 export class HeaderSecondary extends LitElement{
+  static get properties() {
+    return {
+      page: {type: String}
+    };
+  }
 
   static get styles() {
     return [
@@ -41,10 +46,15 @@ export class HeaderSecondary extends LitElement{
     ]
   }
 
+  constructor() {
+    super();
+    this.page = '';
+  }
+
   render() {
     return html`
       <header class="header">
-        <h2 class="header_title">Cookie clicker</h2>
+        <h2 class="header_title">${this.page}</h2>
         <button type="button" aria-label="Go back" aria-labelledby="Go back" @click="${() => window.history.back()}">Back</button>
       </header>
     `;

@@ -37,7 +37,6 @@ export class HeaderPrimary extends LitElement{
         font-size: .875rem;
         cursor:pointer;
       }
-
       `
     ]
   }
@@ -52,7 +51,6 @@ export class HeaderPrimary extends LitElement{
             <li class="header_nav--link"><a aria-label="Go to ranking view" aria-labelledby="Go to login" href="/ranking">Ranking</a></li>
           </ul>
         </nav>
-
       </header>
     `;
   }

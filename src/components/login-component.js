@@ -77,7 +77,6 @@ export class LoginComponent extends LitElement {
     this.isLogged = getLogStatus();
   }
 
-
   render() {
     return html`
       <header class="header">
@@ -97,10 +96,17 @@ export class LoginComponent extends LitElement {
     `;
   }
 
-
+  firstUpdated() {
+    this.shadowRoot.addEventListener('keypress', (e) => {
+      const press = e.keyCode || e.which;
+      if(press === 13) {
+        this.validateData(e);
+      }
+    })
+  }
 
   validateData(e) {
-    e.preventDefault()
+    e.preventDefault();
     if(checkInputUsername(this.user)) {
       this.shadowRoot.querySelector('input-default').setAttribute('isError', true);
       this.shadowRoot.querySelector('input-default').error = inputIsEmpty();
