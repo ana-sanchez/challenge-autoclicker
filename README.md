@@ -1,8 +1,8 @@
 
 ## Challenge autoclicker
 
-Progressive Web App created with @open-wc and lit-element.
-You can test it: <https://challenge-autoclicker.web.app/>
+Progressive Web App created [@open-wc](https://open-wc.org/) and [lit-element](https://lit.dev/).
+You can test it here: <https://challenge-autoclicker.web.app/>
 
 ## Quickstart
 
@@ -34,15 +34,7 @@ Start a local dev server with:
 
 **How to deploy**
 
-- To list all the Firebase projects to which you have access, run:
-
-```firebase projects:list```
-
-- Set current firebase project firebase:
-
-```firebase use [proyect]```
-
-- To deploy in dev:
+ To deploy in dev:
 
 ```npm run deploy-dev```
 
