@@ -42,11 +42,11 @@ export class GameComponent extends LitElement {
         justify-content: center;
         align-items: center;
         gap:20px;
-        padding: 60px 0;
+        padding: 20px 0;
       }
       .main_btn {
         width:100%;
-        max-width:300px;
+        max-width:200px;
         margin: 20px auto 0 auto;
         animation: rotate infinite 20s linear;
         cursor:pointer;
@@ -54,14 +54,14 @@ export class GameComponent extends LitElement {
       .scale {
         animation: scale 0.2s ease-in;
       }
-
-
       .main_autoclikers {
-        margin-top: 50px;
+        margin-top: 30px;
         display:flex;
         gap:10px;
       }
-
+      .main_store {
+        font-size:.75rem;
+      }
       @keyframes rotate {
         from {
           transform: rotate(0deg);
@@ -107,20 +107,23 @@ export class GameComponent extends LitElement {
           class="main_btn"
           aria-label="Click me to add a cookie"
           aria-labelledby="Click me to add a cookie"
+          @click="${() => {this.addCookie()}}"
           @touchstart="${() => {this.addCookie()}}">${cookie}</button>
         <section class="main_autoclikers">
           <button-default
             size="small"
             label="Buy autoclickers"
             ?disabled="${!checkCookies(this.cookies, 100)}"
+            @click="${() => this.buyCookies(0)}"
             @touchstart="${() => this.buyCookies(0)}"></button-default>
           <button-default
             size="small"
             label="Buy megaClickers"
             ?disabled="${!checkCookies(this.cookies, 200)}"
+            @click="${() => this.buyCookies(1)}"
             @touchstart="${() => this.buyCookies(1)}"></button-default>
         </section>
-        <section class="store">
+        <section class="main_store">
           <p>Autoclickers: ${this.progress[0]}</p>
           <p>MegaClickers: ${this.progress[1]}</p>
         </section>
@@ -179,7 +182,7 @@ export class GameComponent extends LitElement {
   saveUserProgress() {
     getDataByName(`${this.user}`, 'user-db','user')
     .then(res => {
-      if(res.user === this.user) {
+      if(res?.user === this.user) {
         res.cookies = this.cookies;
         res.progress = this.progress;
         setData(res, 'user-db', 'user');

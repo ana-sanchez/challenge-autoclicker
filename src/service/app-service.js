@@ -126,7 +126,7 @@ export function setData(data, database, storename){
 export const saveNewUser = (user, value) => {
   window.localStorage.setItem('LogStatus', 200);
   window.localStorage.setItem('current_user', user);
-  saveUser({user, cookies: value, progress: [0,0,0], });
+  saveUser({user, cookies: value, progress: [0,0,0], })
 }
 
 export const saveCurrentUser = (user) => {

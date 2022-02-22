@@ -3,16 +3,18 @@ import { Router } from '@vaadin/router';
 
 import { logo } from '../styles/my-icons.js';
 import { NormalizeCss } from '../styles/normalize.js';
-import { isMandatoryError } from '../service/helpers.js';
+import { checkInputUsername, inputIsEmpty } from '../service/helpers.js';
 import { isUserSaved, saveCurrentUser, saveNewUser } from '../service/app-service.js';
 
 import '../UI/button-default.js';
 import '../UI/input-default.js';
+import { getLogStatus } from '../data/constants.js';
 
 export class LoginComponent extends LitElement {
   static get properties() {
     return {
-      user: {type: String}
+      user: {type: String},
+      isLogged: {type:Boolean}
     };
   }
 
@@ -68,6 +70,12 @@ export class LoginComponent extends LitElement {
     ]
   }
 
+  constructor() {
+    super();
+    this.isLogged = getLogStatus()
+  }
+
+
   render() {
     return html`
       <header class="header">
@@ -79,23 +87,24 @@ export class LoginComponent extends LitElement {
           <input-default label="Name*"
             @get-value="${(e) => {this.user = e.detail.value}}"
           ></input-default>
-          <button-default label="Join" ariaLabel="Join" @click="${() => this.validateData()}"></button-default>
+          <button-default label="Join" ariaLabel="Join" @click="${(e) => this.validateData(e)}"></button-default>
         </form>
       </main>
       <footer class="footer">Powered by Ana Sánchez</footer>
     `;
   }
 
-  validateData() {
-    if(isMandatoryError(this.user)) {
+  validateData(e) {
+    e.preventDefault()
+    if(checkInputUsername(this.user)) {
       this.shadowRoot.querySelector('input-default').setAttribute('isError', true);
-      this.shadowRoot.querySelector('input-default').error = isMandatoryError(this.user);
-    } else if(isUserSaved()){
-      saveNewUser(this.user, 0, [])
-      Router.go('/game');
-    } else  {
+      this.shadowRoot.querySelector('input-default').error = inputIsEmpty();
+    } else if(this.isLogged && !this.isUserSaved(this.user)) { // Handle add current user
       saveCurrentUser(this.user)
       Router.go('/game')
+    } else { // Handle new user
+      saveNewUser(this.user, 0);
+      Router.go('/game');
     }
   }
 }
