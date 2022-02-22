@@ -24,28 +24,33 @@ export class RankingComponent extends LitElement {
         max-width: 360px;
         width:100%;
         margin: 0 auto;
+        background-color: var(--bg_color);
       }
       .wrapper {
-        height: var(--app-height);
+        background-color: var(--bg_color);
+        max-height: var(--app-height);
+        height:100%;
+        overflow: scroll;
+      }
+      header-secondary {
+        position: fixed;
+        width: 100%;
+        background-color: var(--bg_color);
       }
       .main {
         max-width: 500px;
-        min-width: 360px;
+        min-width: 320px;
         width:100%;
         margin: 0 auto;
-        display:flex;
-        flex-direction:column;
-        justify-content: center;
-        align-items: center;
-        gap:20px;
-        padding: 20px;
+        padding: 76px 0 20px 0;
       }
       .main_list {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
         gap: 20px;
+        padding: 5px;
+        height: calc(var(--app-height) - 97px);
+        display: flex;
+        flex-flow: row wrap;
+        place-content: flex-start center;
         padding:5px;
       }
     `
@@ -62,12 +67,10 @@ export class RankingComponent extends LitElement {
     <div class="wrapper">
       <header-secondary></header-secondary>
       <main class="main">
-        <ul class="main_list">
           ${this.allUsers
-            ? html `${this.setMainContent(this.allUsers)}`
+            ? html `<ul class="main_list">${this.setMainContent(this.allUsers)}</ul>`
             : html `<p>No results</p>`
         }
-        </ul>
       </main>
     </div>
     `;

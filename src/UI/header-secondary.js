@@ -37,7 +37,6 @@ export class HeaderSecondary extends LitElement{
         font-size: .875rem;
         cursor:pointer;
       }
-
       `
     ]
   }
@@ -46,7 +45,7 @@ export class HeaderSecondary extends LitElement{
     return html`
       <header class="header">
         <h2 class="header_title">Cookie clicker</h2>
-        <button type="button" aria-label="Go back"  aria-labelledby="Go back" @click="${() => window.history.back()}">Back</button>
+        <button type="button" aria-label="Go back" aria-labelledby="Go back" @click="${() => window.history.back()}">Back</button>
       </header>
     `;
   }

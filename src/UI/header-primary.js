@@ -33,7 +33,7 @@ export class HeaderPrimary extends LitElement{
       .header_nav--link {
         border: 1px solid var(--brown);
         border-radius: 3px;
-        padding: 2px;
+        padding: 5px;
         font-size: .875rem;
         cursor:pointer;
       }

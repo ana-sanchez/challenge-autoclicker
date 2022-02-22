@@ -14,7 +14,6 @@ export class ChallengeAutoclicker extends LitElement {
     return css`
       :host {
         display:block;
-        overflow: hidden;
         width:100%;
         box-sizing: border-box;
       }
@@ -23,7 +22,8 @@ export class ChallengeAutoclicker extends LitElement {
       }
       #outlet{
         background-color: var(--bg_color);
-        height: var(--app-height);
+        max-height: var(--app-height);
+        user-select:none;
       }
     `;
   }

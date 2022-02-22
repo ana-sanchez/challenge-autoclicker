@@ -5,7 +5,7 @@ export const WarnMessages = {
 }
 
 export function getLogStatus(){
-  return localStorage.getItem('LogStatus') === 200;
+  return parseInt(localStorage.getItem('LogStatus'), 10) === 200;
 }
 
 export function getCurrentUser(){

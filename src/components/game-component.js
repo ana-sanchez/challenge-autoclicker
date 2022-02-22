@@ -5,7 +5,7 @@ import { Router } from '@vaadin/router';
 import { NormalizeCss } from '../styles/normalize.js';
 import { cookie } from '../styles/my-icons.js';
 
-import { checkCookies } from '../service/helpers.js';
+import { checkCookies, formatNumber } from '../service/helpers.js';
 import { getCurrentUser } from '../data/constants.js';
 import { getDataByName, setData } from '../service/app-service.js';
 
@@ -15,7 +15,7 @@ export class GameComponent extends LitElement {
   static get properties() {
     return {
       autoClickerCost: {type: Array},
-      cookies: { type: Number },
+      cookies: { type: Number},
       cookieCost: {type: Array},
       progress: {type: Array},
       user: {type: String}
@@ -30,6 +30,9 @@ export class GameComponent extends LitElement {
         max-width: 360px;
         width:100%;
         margin: 0 auto;
+        max-height: var(--app-height);
+        overflow: hidden;
+        user-select: none;
       }
       .wrapper {
         height: var(--app-height);
@@ -63,6 +66,12 @@ export class GameComponent extends LitElement {
       .main_store {
         font-size:.75rem;
       }
+      .transform {
+        // transform: translate3d(50px,10px, -10px);
+        transition:all ease-in 2s;
+        animation: scale 0.2s ease-in;
+      }
+
       @keyframes rotate {
         from {
           transform: rotate(0deg);
@@ -114,13 +123,13 @@ export class GameComponent extends LitElement {
           <button-default
             size="small"
             label="Buy autoClickers"
-            ?disabled="${!checkCookies(this.cookies, 100)}"
+            ?disabled="${!checkCookies(this.cookies, this.autoClickerCost[0])}"
             @click="${() => this.buyCookies(0)}"
             @touchstart="${() => this.buyCookies(0)}"></button-default>
           <button-default
             size="small"
             label="Buy megaClickers"
-            ?disabled="${!checkCookies(this.cookies, 200)}"
+            ?disabled="${!checkCookies(this.cookies, this.autoClickerCost[1])}"
             @click="${() => this.buyCookies(1)}"
             @touchstart="${() => this.buyCookies(1)}"></button-default>
         </section>
@@ -155,7 +164,7 @@ export class GameComponent extends LitElement {
 
   addCookie() {
     this.cookies += 1;
-    this.addAnimationButton();
+    this.addButtonAnimation();
     this.saveUserProgress();
   }
 
@@ -173,13 +182,15 @@ export class GameComponent extends LitElement {
     }
   }
 
-  addAnimationButton() {
+  addButtonAnimation() {
     this.shadowRoot.querySelector('.main_btn').classList.add('scale');
-    setTimeout(() => { this.shadowRoot.querySelector('.main_btn').classList.remove('scale') }, 100);
+    setTimeout(() => {
+      this.shadowRoot.querySelector('.main_btn').classList.remove('scale')
+    }, 100);
   }
 
   setCookies(count) {
-    return html `${count === 1 ? html `${count} cookie` : html `${count} cookies`}`;
+    return html `${count === 1 ? html `${formatNumber(count)} cookie` : html `${formatNumber(count)} cookies`}`;
   }
 
   saveUserProgress() {

@@ -5,7 +5,7 @@ import { logo } from '../styles/my-icons.js';
 import { NormalizeCss } from '../styles/normalize.js';
 import { getLogStatus } from '../data/constants.js';
 import { checkInputUsername, inputIsEmpty } from '../service/helpers.js';
-import { isUserSaved, saveCurrentUser, saveNewUser } from '../service/app-service.js';
+import { isUserSaved, removeData, saveCurrentUser, saveNewUser } from '../service/app-service.js';
 
 import '../UI/button-default.js';
 import '../UI/input-default.js';
@@ -56,6 +56,7 @@ export class LoginComponent extends LitElement {
       .form {
         display: flex;
         flex-direction: column;
+        align-items: center;
       }
       .footer {
         position: fixed;
@@ -73,7 +74,7 @@ export class LoginComponent extends LitElement {
 
   constructor() {
     super();
-    this.isLogged = getLogStatus()
+    this.isLogged = getLogStatus();
   }
 
 
@@ -89,24 +90,34 @@ export class LoginComponent extends LitElement {
             @get-value="${(e) => {this.user = e.detail.value}}"
           ></input-default>
           <button-default label="Join" ariaLabel="Join" @click="${(e) => this.validateData(e)}"></button-default>
+          <button-default name="delete" label="Delete all users" size="small" ariaLabel="Join" @click="${(e) => this.deleteAllUsers(e)}" ?disabled="${!this.isLogged}"></button-default>
         </form>
       </main>
-      <footer class="footer">Powered by Ana Sánchez</footer>
+      <footer class="footer"><p>Powered by Ana Sánchez</p></footer>
     `;
   }
+
+
 
   validateData(e) {
     e.preventDefault()
     if(checkInputUsername(this.user)) {
       this.shadowRoot.querySelector('input-default').setAttribute('isError', true);
       this.shadowRoot.querySelector('input-default').error = inputIsEmpty();
-    } else if(this.isLogged && !isUserSaved(this.user)) { // Handle add current user
+    } else if(this.isLogged && isUserSaved(this.user)) { // Handle add current user
       saveCurrentUser(this.user);
       Router.go('/game');
     } else { // Handle new user
       saveNewUser(this.user, 0);
       Router.go('/game');
     }
+  }
+
+  deleteAllUsers() {
+    removeData('user-db');
+    localStorage.clear();
+    this.shadowRoot.querySelector('button-default[name="delete"]').disabled = true;
+    window.location.reload()
   }
 }
 customElements.define('login-component', LoginComponent);

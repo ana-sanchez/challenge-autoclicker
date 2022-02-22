@@ -15,7 +15,7 @@ export function saveUser(data){
     db.then(async idb => {
       if(data){
         const store = idb.transaction('user', 'readwrite').objectStore('user');
-        await store.add(data);
+        await store.put(data);
         res();
       }
     })
