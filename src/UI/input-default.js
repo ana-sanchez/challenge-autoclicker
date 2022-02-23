@@ -90,7 +90,7 @@ export class InputDefault extends LitElement{
     const {label, isError, error} = this
     return html`
     <fieldset class="fieldset">
-      <label for="input-default" class="fieldset_label" aria-label="${label}" aria-labelledby="${label}">${label}</label>
+      <label for="input-default" class="fieldset_label" aria-label="${label}" aria-labelledby="${label}" @click="${() => this.initInputFocus()}" >${label}</label>
       <input type="text" name="input-default" aria-label="Login" aria-labelledby="Login" maxlength="10" placeholder="User" class="fieldset_input ${isError ? 'isError' : ''}"
         @keyup="${() => this.handleKeyUp()}"
         @focus="${() => this.handleFocus()}"
@@ -99,6 +99,14 @@ export class InputDefault extends LitElement{
       ${isError ? html `<p class="fieldset_error">${error}</p>` : ''}
     </fieldset>
   `;
+  }
+
+  initInputFocus() {
+    if(this._inputElement ){
+      this._inputElement.focus();
+    } else {
+      this.shadowRoot.querySelector('input[name="input-default"]').focus();
+    }
   }
 
   handleKeyUp() {
