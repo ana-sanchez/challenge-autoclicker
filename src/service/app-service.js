@@ -1,9 +1,9 @@
 import { openDB, deleteDB } from 'idb';
-import { logStatus } from '../data/constants';
+import { logStatus } from '../data/constants.js';
 
 // Save User data data when logging in
 export function saveUser(data){
-  return new Promise((res, rej) => {
+  return new Promise((res) => {
     const db = openDB('user-db', 1, {
       upgrade(db) {
         const store = db.createObjectStore('user', {
@@ -48,7 +48,7 @@ export function captureException(){
 }
 
 export function getData(database, storename){
-  return new Promise(async(res, rej) => {
+  return new Promise((res) => {
     checkIDB(database)
     .then(async dbExists => {
       if(dbExists){
@@ -66,45 +66,20 @@ export function getData(database, storename){
   });
 }
 
-
-
 export function getDataByName(key, database, storename){
-  return new Promise(async(res, rej) => {
+  return new Promise((res, rej) => {
     checkIDB(database)
     .then(async dbExists => {
       if(dbExists){
         const db =  openDB(database);
         const request = db.then(async idb => {
           const data = await idb.getFromIndex(storename, 'user', key);
-          res(data)
-         return data
+          res(data);
+          return data
         })
         return request
       }
-        rej()
-
-    }).catch((err) => {
-      console.log(err);
-    });
-  });
-
-
-}
-
-export function addData(data, database, storename){
-  return new Promise(async(res, rej) => {
-    checkIDB(database)
-    .then(async dbExists => {
-      if(dbExists){
-        const db = await openDB(database);
-        const tx = db.transaction(storename, 'readwrite');
-        const store = tx.objectStore(storename);
-        await store.put(data);
-        await store.getAll().then(request => { res(request) });
-        await tx.done;
-      }else {
-        captureException();
-      }
+        rej();
     }).catch((err) => {
       console.log(err);
     });
@@ -112,7 +87,7 @@ export function addData(data, database, storename){
 }
 
 export function setData(data, database, storename){
-  return new Promise(async(res, rej) => {
+  return new Promise((res) => {
     checkIDB(database)
     .then(async dbExists => {
       if(dbExists){
@@ -153,12 +128,12 @@ export const saveUserProgress = (user, cookies, progress) => {
       if(res) {
         res.cookies = cookies;
         res.progress = progress;
-       await setData(res, 'user-db', 'user');
+        await setData(res, 'user-db', 'user');
       }
     })
   }
 
-export const isUserSaved = (user) =>{
+export const isUserSaved = (user) => {
  return getDataByName(`${user}`, 'user-db','user')
   .then(res => {
     if(res) {

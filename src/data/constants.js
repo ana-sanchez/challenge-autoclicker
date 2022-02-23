@@ -3,6 +3,7 @@ export const logStatus = 200;
 export const keyEnter = 13;
 export const timeoutGame = 100;
 export const timeoutAnimations = 100;
+export const radixNumber = 10;
 
 // Form warn messages
 export const WarnMessages = {
@@ -11,7 +12,7 @@ export const WarnMessages = {
 }
 
 export function getLogStatus(){
-  return parseInt(localStorage.getItem('LogStatus')) === logStatus;
+  return parseInt(localStorage.getItem('LogStatus'), radixNumber) === logStatus;
 }
 
 export function getCurrentUser(){

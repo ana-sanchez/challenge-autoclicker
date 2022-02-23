@@ -16,7 +16,7 @@ export class GameComponent extends LitElement {
     return {
       autoClickerCost: {type: Array},
       cookies: { type: Number},
-      cookieCost: {type: Array},
+      cookiesCost: {type: Array},
       progress: {type: Array},
       user: {type: String}
     };
@@ -145,7 +145,7 @@ export class GameComponent extends LitElement {
           this.progress = res.progress;
           this.requestUpdate()
           if(this.progress[0] >= 1) {
-            setInterval(() => { this.handleAutoclickers() }, timeoutGame);
+            this._autoClickerInterval = setInterval(() => { this.handleAutoclickers() }, timeoutGame);
           }
         } else {
           Router.go('/')
@@ -156,6 +156,9 @@ export class GameComponent extends LitElement {
 
   onBeforeLeave() {
     saveUserProgress(this.user, this.cookies, this.progress);
+    if(this._autoClickerInterval) {
+      clearInterval(this._autoClickerInterval)
+    }
   }
 
   addCookie() {
@@ -168,7 +171,7 @@ export class GameComponent extends LitElement {
     if(checkCookies(this.cookies, this.autoClickerCost[obj])) {
       this.progress[obj] += 1;
       this.cookies -= this.autoClickerCost[obj];
-      setInterval(() => { this.handleAutoclickers() }, timeoutGame);
+      this._autoClickerInterval = setInterval(() => { this.handleAutoclickers() }, timeoutGame);
     }
   }
 

@@ -40,6 +40,8 @@ export class CardRanking extends LitElement{
   constructor(){
     super();
     this.user = {};
+    this.autoclickers = 0;
+    this.megaclikers = 0;
   }
 
   render() {
@@ -53,13 +55,7 @@ export class CardRanking extends LitElement{
       `;
   }
 
-  firstUpdated() {
-    if(this.user.progress) {
-      this.autoclickers = this.user.progress[0];
-      this.megaclikers = this.user.progress[1];
-    }
 
-  }
 }
 
 customElements.define('card-ranking', CardRanking);

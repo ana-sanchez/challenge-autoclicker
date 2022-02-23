@@ -3,7 +3,7 @@ import { LitElement, html, css } from 'lit-element';
 
 import { NormalizeCss } from '../styles/normalize.js';
 
-import { getData} from '../service/app-service.js';
+import { getData } from '../service/app-service.js';
 
 import '../UI/header-secondary.js';
 import '../UI/card-ranking.js';
@@ -11,7 +11,7 @@ import '../UI/card-ranking.js';
 export class RankingComponent extends LitElement {
   static get properties() {
     return {
-      allUsers: {type: String},
+      allUsers: {type: Array},
       user: {type: String}
     };
   }
@@ -69,7 +69,7 @@ export class RankingComponent extends LitElement {
     <div class="wrapper">
       <header-secondary page="Ranking"></header-secondary>
       <main class="main">
-          ${this.allUsers
+          ${this.allUsers.length
             ? html `<ul class="main_list">${this.setMainContent(this.allUsers)}</ul>`
             : html `<p>No results</p>`}
       </main>
@@ -77,7 +77,8 @@ export class RankingComponent extends LitElement {
     `;
   }
 
-  onAfterEnter() {
+  async firstUpdated() {
+    await new Promise((r) => setTimeout(r, 100));
     getData('user-db', 'user')
     .then(res => {
       if(res) {
@@ -88,9 +89,9 @@ export class RankingComponent extends LitElement {
   }
 
   setMainContent(users) {
-    return html `
-      ${users.map(user => html `<li><card-ranking .user="${user}"></card-ranking></li>`)}
-    `
+    if(users.length) {
+      return html `${users.map(user => html `<li><card-ranking .user="${user}" autoclickers="${user.progress[0]}" megaclickers="${user.progress[0]}"></card-ranking></li>`)}`
+    }
   }
 }
 customElements.define('ranking-component', RankingComponent);
