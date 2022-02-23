@@ -47,9 +47,10 @@ export class InputDefault extends LitElement{
         border: 1px solid rgb(184, 120, 80);
         box-shadow: rgb(0 0 0 / 14%) 0px 3px 1px -2px, rgb(0 0 0 / 7%) 0px 2px 2px 0px, rgb(0 0 0 / 4%) 0px 1px 5px 0px;
         cursor: pointer;
-        padding: 10px;
+        padding: 0 10px;
         color: rgb(55 25 7);
         font-size: .875rem;
+        height:40px;
       }
       .fieldset_input.isError {
         border: 1px solid var(--danger);

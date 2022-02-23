@@ -93,8 +93,8 @@ export class GameComponent extends LitElement {
     super();
     this.user = getCurrentUser();
     this.cookies = 0;
-    this.progress = [0,0,0]
-    this.cookiesCost =[1,2,4]
+    this.progress = [0,0,0];
+    this.cookiesCost =[1,2,4];
     this.autoClickerCost = [100,200,400];
   }
 
@@ -103,7 +103,7 @@ export class GameComponent extends LitElement {
     <div class="wrapper">
       <header-primary></header-primary>
       <main class="main">
-        <p class="main_score"> Hi ${this.user}! </p>
+        <p class="main_score"> Hi ${this.user}!</p>
         <p class="main_score">${this.setCookies(this.cookies)}</p>
         <button
           type="button"
@@ -144,7 +144,7 @@ export class GameComponent extends LitElement {
           this.cookies = res.cookies;
           this.progress = res.progress;
           this.requestUpdate()
-          if(this.progress[0] >= 1) {
+          if(this.progress[0] >= 1 || this.progress[1] >= 1) {
             this._autoClickerInterval = setInterval(() => { this.handleAutoclickers() }, timeoutGame);
           }
         } else {

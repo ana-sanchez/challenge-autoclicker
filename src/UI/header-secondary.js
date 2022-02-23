@@ -35,7 +35,7 @@ export class HeaderSecondary extends LitElement{
         display:inline-flex;
         gap:10px;
       }
-      .header_nav--link {
+      .header_nav--button {
         border: 1px solid var(--brown);
         border-radius: 3px;
         padding: 5px;
@@ -55,7 +55,7 @@ export class HeaderSecondary extends LitElement{
     return html`
       <header class="header">
         <h2 class="header_title">${this.page}</h2>
-        <button type="button" aria-label="Go back" aria-labelledby="Go back" @click="${() => window.history.back()}">Back</button>
+        <button type="button" class="header_nav--button" aria-label="Go back" aria-labelledby="Go back" @click="${() => window.history.back()}">Back</button>
       </header>
     `;
   }

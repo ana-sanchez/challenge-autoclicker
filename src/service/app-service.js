@@ -41,6 +41,20 @@ export async function removeData(database){
   await deleteDB(database);
 }
 
+export function clearStore(database, storename){
+  return checkIDB(database)
+  .then(dbExists => {
+    if(dbExists){
+      const db = openDB(database);
+      return db.then(async idb => {
+        await idb.transaction(storename, 'readwrite').objectStore(storename).clear();
+      })
+    }
+  }).catch((err) => {
+    console.log(err)
+  });
+}
+
 export function captureException(){
   removeData('user-db');
   localStorage.clear();

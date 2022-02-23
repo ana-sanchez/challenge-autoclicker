@@ -5,7 +5,7 @@ import { logo } from '../styles/my-icons.js';
 import { NormalizeCss } from '../styles/normalize.js';
 import { getLogStatus, keyEnter } from '../data/constants.js';
 import { checkInputUsername, inputIsEmpty } from '../service/helpers.js';
-import { isUserSaved, removeData, saveCurrentUser, saveNewUser } from '../service/app-service.js';
+import { clearStore, isUserSaved, saveCurrentUser, saveNewUser } from '../service/app-service.js';
 
 import '../UI/button-default.js';
 import '../UI/input-default.js';
@@ -136,8 +136,8 @@ export class LoginComponent extends LitElement {
   }
 
  async deleteAllUsers() {
-    await removeData('user-db')
     localStorage.clear();
+    await clearStore('user-db', 'user')
     this.shadowRoot.querySelector('button-default[name="delete"]').disabled = true;
     window.location.reload();
   }
