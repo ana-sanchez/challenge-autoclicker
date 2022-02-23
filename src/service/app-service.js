@@ -1,4 +1,5 @@
 import { openDB, deleteDB } from 'idb';
+import { logStatus } from '../data/constants';
 
 // Save User data data when logging in
 export function saveUser(data){
@@ -16,7 +17,7 @@ export function saveUser(data){
       if(data){
         const store = idb.transaction('user', 'readwrite').objectStore('user');
         await store.put(data);
-        res();
+        res(data);
       }
     })
   })
@@ -54,32 +55,40 @@ export function getData(database, storename){
         const db = await openDB(database);
         const tx = db.transaction(storename, 'readonly');
         const store = tx.objectStore(storename);
-        await store.getAll().then(request => { res(request) })
+        await store.getAll().then(request => { res(request) });
         await tx.done;
       }else{
         captureException();
       }
     }).catch((err) => {
-      console.log(err)
+      console.log(err);
     });
   });
 }
 
+
+
 export function getDataByName(key, database, storename){
-  return checkIDB(database)
-  .then(async dbExists => {
-    if(dbExists){
-      const db = openDB(database);
-      const request = db.then(async idb => {
-        const data = await idb.getFromIndex(storename, 'user', key);
-        return data;
-      })
-      return request;
-    }
-    captureException();
-  }).catch((err) => {
-    console.log(err)
+  return new Promise(async(res, rej) => {
+    checkIDB(database)
+    .then(async dbExists => {
+      if(dbExists){
+        const db =  openDB(database);
+        const request = db.then(async idb => {
+          const data = await idb.getFromIndex(storename, 'user', key);
+          res(data)
+         return data
+        })
+        return request
+      }
+        rej()
+
+    }).catch((err) => {
+      console.log(err);
+    });
   });
+
+
 }
 
 export function addData(data, database, storename){
@@ -117,28 +126,45 @@ export function setData(data, database, storename){
         captureException();
       }
     }).catch((err) => {
-      console.log(err)
+      console.log(err);
     });
   });
 }
 
-export const saveNewUser = (user, value) => {
-  window.localStorage.setItem('LogStatus', 200);
-  window.localStorage.setItem('current_user', user);
-  saveUser({user, cookies: value, progress: [0,0,0], })
-}
+export const saveNewUser = (user, value) => saveUser({user, cookies: value, progress: [0,0,0], })
+    .then(res => {
+      if(res) {
+        window.localStorage.setItem('LogStatus', logStatus);
+        window.localStorage.setItem('current_user', user);
+        return true
+      }
+      return false
+    })
 
 export const saveCurrentUser = (user) => {
-  window.localStorage.setItem('LogStatus', 200);
+  window.localStorage.setItem('LogStatus', logStatus);
   window.localStorage.setItem('current_user', user);
+
 }
 
-export const isUserSaved = (user) => {
-  getDataByName(`${user}`, 'user-db','user')
+export const saveUserProgress = (user, cookies, progress) => {
+    getDataByName(`${user}`, 'user-db','user')
+    .then(async res => {
+      if(res) {
+        res.cookies = cookies;
+        res.progress = progress;
+       await setData(res, 'user-db', 'user');
+      }
+    })
+  }
+
+export const isUserSaved = (user) =>{
+ return getDataByName(`${user}`, 'user-db','user')
   .then(res => {
-    if(res?.user === user) {
+    if(res) {
       return true
     }
     return false
   })
+
 }

@@ -5,7 +5,9 @@ import { NormalizeCss } from '../styles/normalize.js';
 export class CardRanking extends LitElement{
   static get properties(){
     return {
-      user: {type: Object}
+      user: {type: Object},
+      autoclickers: {type: Number},
+      megaclikers: {type: Number}
     }
   }
 
@@ -43,12 +45,20 @@ export class CardRanking extends LitElement{
   render() {
     return html`
       <div class="card">
-        <h3 class="card_username">${this.user?.user}</h3>
-        <p class="card_cookies">Cookies: ${formatNumber(this.user?.cookies)}</p>
-        <p class="card_autoclickers">AutoClickiers: ${this.user?.progress[0]}</p>
-        <p class="card_megaclickers">MegaClickers: ${this.user?.progress[1]}</p>
+        <h3 class="card_username">${this.user.user}</h3>
+        <p class="card_cookies">Cookies: ${formatNumber(this.user.cookies)}</p>
+        <p class="card_autoclickers">AutoClickiers: ${this.autoclickers}</p>
+        <p class="card_megaclickers">MegaClickers: ${this.megaclikers}</p>
       </div>
       `;
+  }
+
+  firstUpdated() {
+    if(this.user.progress) {
+      this.autoclickers = this.user.progress[0];
+      this.megaclikers = this.user.progress[1];
+    }
+
   }
 }
 

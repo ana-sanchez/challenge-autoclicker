@@ -3,7 +3,7 @@ import { Router } from '@vaadin/router';
 
 import { logo } from '../styles/my-icons.js';
 import { NormalizeCss } from '../styles/normalize.js';
-import { getLogStatus } from '../data/constants.js';
+import { getLogStatus, keyEnter } from '../data/constants.js';
 import { checkInputUsername, inputIsEmpty } from '../service/helpers.js';
 import { isUserSaved, removeData, saveCurrentUser, saveNewUser } from '../service/app-service.js';
 
@@ -89,7 +89,7 @@ export class LoginComponent extends LitElement {
             @get-value="${(e) => {this.user = e.detail.value}}"
           ></input-default>
           <button-default label="Join" ariaLabel="Join" @click="${(e) => this.validateData(e)}"></button-default>
-          <button-default name="delete" label="Delete all users" size="small" ariaLabel="Join" @click="${(e) => this.deleteAllUsers(e)}" ?disabled="${!this.isLogged}"></button-default>
+          <button-default name="delete" label="Delete all users" size="small" ariaLabel="Join" @click="${() => this.deleteAllUsers()}" ?disabled="${!this.isLogged}"></button-default>
         </form>
       </main>
       <footer class="footer"><p>Powered by Ana Sánchez</p></footer>
@@ -99,7 +99,7 @@ export class LoginComponent extends LitElement {
   firstUpdated() {
     this.shadowRoot.addEventListener('keypress', (e) => {
       const press = e.keyCode || e.which;
-      if(press === 13) {
+      if(press === keyEnter) {
         this.validateData(e);
       }
     })
@@ -110,20 +110,36 @@ export class LoginComponent extends LitElement {
     if(checkInputUsername(this.user)) {
       this.shadowRoot.querySelector('input-default').setAttribute('isError', true);
       this.shadowRoot.querySelector('input-default').error = inputIsEmpty();
-    } else if(this.isLogged && isUserSaved(this.user)) { // Handle add current user
-      saveCurrentUser(this.user);
-      Router.go('/game');
-    } else { // Handle new user
-      saveNewUser(this.user, 0);
-      Router.go('/game');
-    }
+    } else if(!this.isLogged){
+        saveNewUser(this.user, 0)
+        .then(response => {
+          if(response) {
+            Router.go('/game');
+          }
+        })
+      } else if(this.isLogged) {
+        isUserSaved(this.user)
+        .then(res => {
+          if(res) {
+            saveCurrentUser(this.user)
+            Router.go('/game');
+          } else {
+            saveNewUser(this.user, 0)
+            .then(user => {
+              if(user) {
+                Router.go('/game');
+              }
+            })
+          }
+        })
+      }
   }
 
-  deleteAllUsers() {
-    removeData('user-db');
+ async deleteAllUsers() {
+    await removeData('user-db')
     localStorage.clear();
     this.shadowRoot.querySelector('button-default[name="delete"]').disabled = true;
-    window.location.reload()
+    window.location.reload();
   }
 }
 customElements.define('login-component', LoginComponent);

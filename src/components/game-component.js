@@ -6,8 +6,8 @@ import { NormalizeCss } from '../styles/normalize.js';
 import { cookie } from '../styles/my-icons.js';
 
 import { checkCookies, formatNumber } from '../service/helpers.js';
-import { getCurrentUser } from '../data/constants.js';
-import { getDataByName, setData } from '../service/app-service.js';
+import { timeoutGame, timeoutAnimations, getCurrentUser } from '../data/constants.js';
+import { getDataByName, saveUserProgress } from '../service/app-service.js';
 
 import '../UI/header-primary.js';
 
@@ -66,12 +66,6 @@ export class GameComponent extends LitElement {
       .main_store {
         font-size:.75rem;
       }
-      .transform {
-        // transform: translate3d(50px,10px, -10px);
-        transition:all ease-in 2s;
-        animation: scale 0.2s ease-in;
-      }
-
       @keyframes rotate {
         from {
           transform: rotate(0deg);
@@ -142,14 +136,17 @@ export class GameComponent extends LitElement {
     `;
   }
 
-  onAfterEnter() {
+  onBeforeEnter() {
     if(this.user) {
       getDataByName(`${this.user}`, 'user-db','user')
-      .then(res => {
+      .then(async res => {
         if(res) {
           this.cookies = res.cookies;
           this.progress = res.progress;
-          if(this.progress[0] >= 1) setInterval(() => { this.handleAutoclickers() }, 100)
+          this.requestUpdate()
+          if(this.progress[0] >= 1) {
+            setInterval(() => { this.handleAutoclickers() }, timeoutGame);
+          }
         } else {
           Router.go('/')
         }
@@ -158,20 +155,20 @@ export class GameComponent extends LitElement {
   }
 
   onBeforeLeave() {
-    this.saveUserProgress();
+    saveUserProgress(this.user, this.cookies, this.progress);
   }
 
   addCookie() {
     this.cookies += 1;
     this.addButtonAnimation();
-    this.saveUserProgress();
+    saveUserProgress(this.user, this.cookies, this.progress);
   }
 
   buyCookies(obj) {
     if(checkCookies(this.cookies, this.autoClickerCost[obj])) {
       this.progress[obj] += 1;
       this.cookies -= this.autoClickerCost[obj];
-      setInterval(() => { this.handleAutoclickers() }, 100);
+      setInterval(() => { this.handleAutoclickers() }, timeoutGame);
     }
   }
 
@@ -185,22 +182,11 @@ export class GameComponent extends LitElement {
     this.shadowRoot.querySelector('.main_btn').classList.add('scale');
     setTimeout(() => {
       this.shadowRoot.querySelector('.main_btn').classList.remove('scale');
-    }, 100);
+    }, timeoutAnimations);
   }
 
   setCookies(count) {
     return html `${count === 1 ? html `${formatNumber(count)} cookie` : html `${formatNumber(count)} cookies`}`;
-  }
-
-  saveUserProgress() {
-    getDataByName(`${this.user}`, 'user-db','user')
-    .then(res => {
-      if(res.user === this.user) {
-        res.cookies = this.cookies;
-        res.progress = this.progress;
-        setData(res, 'user-db', 'user');
-      }
-    })
   }
 }
 customElements.define('game-component', GameComponent);

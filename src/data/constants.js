@@ -1,3 +1,9 @@
+
+export const logStatus = 200;
+export const keyEnter = 13;
+export const timeoutGame = 100;
+export const timeoutAnimations = 100;
+
 // Form warn messages
 export const WarnMessages = {
   "warn-001": "This field is required.",
@@ -5,7 +11,7 @@ export const WarnMessages = {
 }
 
 export function getLogStatus(){
-  return parseInt(localStorage.getItem('LogStatus'), 10) === 200;
+  return parseInt(localStorage.getItem('LogStatus')) === logStatus;
 }
 
 export function getCurrentUser(){

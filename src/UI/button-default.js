@@ -45,8 +45,8 @@ export class ButtonDefault extends LitElement{
 
   constructor(){
     super();
-    this.label = "Button default";
-    this.ariaLabel = "Button default";
+    this.label = 'Button default';
+    this.ariaLabel = 'Button default';
     this.disabled = false;
   }
 
